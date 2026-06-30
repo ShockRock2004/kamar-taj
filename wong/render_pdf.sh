@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render a daily-log markdown file to a phone-friendly PDF.
+# Render a wong markdown file to a phone-friendly PDF.
 #   markdown --(marked)--> styled HTML --(headless Chrome)--> PDF
 #
 # Needs Node/npx (for `marked`) and a Chrome-like browser (for print-to-pdf).
@@ -11,7 +11,7 @@
 
 MD="${1:-}"
 if [ -z "$MD" ] || [ ! -f "$MD" ]; then
-  echo "[daily-log pdf] no markdown file given — skipping PDF"
+  echo "[wong pdf] no markdown file given — skipping PDF"
   exit 0
 fi
 
@@ -26,23 +26,23 @@ for b in \
 done
 
 if ! command -v npx >/dev/null 2>&1; then
-  echo "[daily-log pdf] node/npx not found — skipping PDF (install Node to enable)"
+  echo "[wong pdf] node/npx not found — skipping PDF (install Node to enable)"
   exit 0
 fi
 if [ -z "$CHROME" ]; then
-  echo "[daily-log pdf] no Chrome-like browser found — skipping PDF"
+  echo "[wong pdf] no Chrome-like browser found — skipping PDF"
   exit 0
 fi
 
 PDF="${MD%.md}.pdf"
-TMPHTML="$(mktemp -t daily-log-XXXX).html"
-TMPPROFILE="$(mktemp -d -t daily-log-prof-XXXX)"
+TMPHTML="$(mktemp -t wong-XXXX).html"
+TMPPROFILE="$(mktemp -d -t wong-prof-XXXX)"
 
 # 1) markdown -> HTML fragment (marked enables GitHub-flavored markdown by default:
 #    fenced code blocks, tables, etc.). First run downloads marked into the npx cache.
 BODY="$(npx -y marked -i "$MD" 2>/dev/null)"
 if [ -z "$BODY" ]; then
-  echo "[daily-log pdf] markdown->HTML conversion failed — skipping PDF"
+  echo "[wong pdf] markdown->HTML conversion failed — skipping PDF"
   rm -rf "$TMPHTML" "$TMPPROFILE"
   exit 0
 fi
@@ -93,8 +93,8 @@ HTMLDOC
 rm -rf "$TMPHTML" "$TMPPROFILE"
 
 if [ -f "$PDF" ]; then
-  echo "[daily-log pdf] rendered $PDF"
+  echo "[wong pdf] rendered $PDF"
 else
-  echo "[daily-log pdf] PDF render failed — skipping (markdown is unaffected)"
+  echo "[wong pdf] PDF render failed — skipping (markdown is unaffected)"
 fi
 exit 0

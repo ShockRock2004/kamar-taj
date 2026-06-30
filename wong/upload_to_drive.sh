@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Upload a daily-log markdown file to Google Drive via rclone.
+# Upload a wong markdown file to Google Drive via rclone.
 #
 # ONE-TIME SETUP (run by you, once):
 #   brew install rclone
 #   rclone config          # create a remote named "gdrive" (type: drive), browser login
 #
-# After that, the /daily-log skill calls this automatically on every run.
+# After that, the /wong skill calls this automatically on every run.
 #
 # Usage:  upload_to_drive.sh "/path/to/<file>.md"
 #
@@ -22,18 +22,18 @@ KEEP_LOCAL_PDF=false       # keep only the .md on disk: delete the local PDF aft
 FILE="${1:-}"
 
 if [ -z "$FILE" ] || [ ! -f "$FILE" ]; then
-  echo "[daily-log upload] no file given or file missing — skipping upload"
+  echo "[wong upload] no file given or file missing — skipping upload"
   exit 0
 fi
 
 if ! command -v rclone >/dev/null 2>&1; then
-  echo "[daily-log upload] rclone not installed — skipping upload."
+  echo "[wong upload] rclone not installed — skipping upload."
   echo "                   To enable: brew install rclone && rclone config (remote name: ${REMOTE})"
   exit 0
 fi
 
 if ! rclone listremotes 2>/dev/null | grep -q "^${REMOTE}:"; then
-  echo "[daily-log upload] rclone remote '${REMOTE}' not configured — skipping upload."
+  echo "[wong upload] rclone remote '${REMOTE}' not configured — skipping upload."
   echo "                   To enable: run 'rclone config' and create a Google Drive remote named '${REMOTE}'."
   exit 0
 fi
@@ -42,10 +42,10 @@ fi
 # (the additive/append flow) keeps the Drive copy in sync without duplicates.
 _upload() {
   if rclone copy "$1" "${REMOTE}:${DRIVE_FOLDER}"; then
-    echo "[daily-log upload] uploaded ${REMOTE}:${DRIVE_FOLDER}/$(basename "$1")"
+    echo "[wong upload] uploaded ${REMOTE}:${DRIVE_FOLDER}/$(basename "$1")"
     return 0
   else
-    echo "[daily-log upload] upload failed for $(basename "$1") (rclone error above) — local file unaffected"
+    echo "[wong upload] upload failed for $(basename "$1") (rclone error above) — local file unaffected"
     return 1
   fi
 }
@@ -64,6 +64,6 @@ fi
 
 # Keep only the .md locally: remove the PDF once it's safely on Drive.
 if [ "$KEEP_LOCAL_PDF" != true ] && [ "$pdf_uploaded" = true ]; then
-  rm -f "$PDF" && echo "[daily-log upload] removed local PDF (kept the .md only)"
+  rm -f "$PDF" && echo "[wong upload] removed local PDF (kept the .md only)"
 fi
 exit 0

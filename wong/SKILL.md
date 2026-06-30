@@ -1,9 +1,9 @@
 ---
-name: daily-log
-description: Compile everything Claude did today across ALL sessions and repos into one dated teaching-guide markdown saved in "~/Daily Log", render it as a phone-readable PDF, and upload to Google Drive. Safe to run multiple times a day — it appends only newly-uncovered work to that day's single file rather than overwriting. Use when the user runs /daily-log, or says "log today's work", "end of day log", "daily log", "wrap up the day", or any similar end-of-day trigger. Accepts an effort level (light/medium/heavy, default heavy) to control token usage — e.g. "/daily-log medium" — and optionally a past date (YYYY-MM-DD).
+name: wong
+description: Compile everything Claude did today across ALL sessions and repos into one dated teaching-guide markdown saved in "~/Daily Log", render it as a phone-readable PDF, and upload to Google Drive. Safe to run multiple times a day — it appends only newly-uncovered work to that day's single file rather than overwriting. Use when the user runs /wong, or says "log today's work", "end of day log", "daily log", "wrap up the day", or any similar end-of-day trigger. Accepts an effort level (light/medium/heavy, default heavy) to control token usage — e.g. "/wong medium" — and optionally a past date (YYYY-MM-DD).
 ---
 
-# Daily Log — end-of-day learning guidebook
+# Wong — end-of-day learning guidebook (formerly daily-log)
 
 Turn a full day of Claude Code work (across every session and repo) into a single
 dated markdown file written as a **teaching guide**, so the user can genuinely
@@ -21,7 +21,7 @@ completeness of trivia. See the full **Writing style — REQUIRED** rules in ste
 The user may pass an effort level as the first argument: **light**, **medium**, or
 **heavy**. If none is given, default to **heavy**. (They may also pass a date; a
 `YYYY-MM-DD` token is the date, a light/medium/heavy token is the effort. Either
-order, both optional. e.g. `/daily-log medium`, `/daily-log light 2026-06-25`.)
+order, both optional. e.g. `/wong medium`, `/wong light 2026-06-25`.)
 
 Effort controls token usage — it scales BOTH the digest size (via `--effort` on
 the collector) AND how much you do while writing:
@@ -44,16 +44,21 @@ Run the collector with the chosen effort (it reads every session transcript from
 disk, so it captures *all* concurrent/closed sessions, not just this one):
 
 ```bash
-python3 ~/.claude/skills/daily-log/collect_day.py --effort heavy
+python3 ~/.claude/skills/wong/collect_day.py --effort heavy
 ```
 
 Replace `heavy` with the level from Step 0. To log a past day, add the date:
-`python3 ~/.claude/skills/daily-log/collect_day.py --effort medium 2026-06-25`
+`python3 ~/.claude/skills/wong/collect_day.py --effort medium 2026-06-25`
 
 It prints the path to a digest file (`~/Daily Log/.digest-<date>.md`).
 **Read that digest fully.** It contains, per repo: the day's git commit map,
 uncommitted change stats, and per session — the user's prompts, the files Claude
 edited, Claude's explanatory prose, and any subagent results.
+
+**Also read the glossary** at `~/Daily Log/.glossary.md` (if it doesn't exist,
+treat it as empty). It lists the trivial/foundational terms already explained on
+previous days. You will NOT re-explain anything already in it — see "Explain trivial
+terms only once" in step 4.
 
 If the digest says no sessions were active, tell the user and stop.
 
@@ -144,9 +149,15 @@ top to bottom with no prior context.
 
 - **Conversational and simple.** Short sentences. Plain words. Explain like you're
   talking to a friend, not writing a report. Avoid jargon in the narrative.
-- **Define every technical term the first time it appears**, in everyday language,
-  using a blockquote box: `> **What "X" means.** …`. Use real-world analogies
-  (an address book, a switchboard operator, a reservoir of water, a sticky note).
+- **Define each technical term once across the whole series — not once per day.**
+  The first time a term appears *ever*, define it in everyday language in a
+  blockquote box: `> **What "X" means.** …` (use real-world analogies). But first
+  check the glossary (`~/Daily Log/.glossary.md`) and **never re-define a term
+  already listed there.** This matters most for trivial, recurring foundations —
+  what a repo/commit/branch is, what Yotel is, basic git — explain them once, then
+  just use them. A brand-new term that is genuinely central to *today's* work still
+  gets its box; a basic that has been covered before does not. See "Explain trivial
+  terms only once" below for the mechanics.
 - **Stay technical only where technical precision is the point** — e.g. the actual
   code change, the exact file, the real trade-off. Show the real code, but wrap it
   in plain-English explanation before and after, and comment the snippet in plain
@@ -164,6 +175,25 @@ top to bottom with no prior context.
 Match the tone of the most recent existing file in `~/Daily Log/` (read it as the
 reference example if one exists).
 
+#### Explain trivial terms only once (the glossary)
+A reader of the whole series should not see "what a repo is" or "what Yotel is"
+re-explained every single day. So:
+
+1. **Before writing,** read `~/Daily Log/.glossary.md` (the list of terms already
+   explained). Treat everything in it as known — do **not** write a `> **What "X"
+   means.**` box for any term on the list. Just use the term normally.
+2. **While writing,** only add a definition box for a term that is genuinely new to
+   the series (not in the glossary). Bias hard against re-defining trivial
+   foundations; if in doubt about a basic, assume it's been covered and skip it.
+3. **After writing/appending,** update `~/Daily Log/.glossary.md`: append (one per
+   line) any term you defined for the first time today. Never remove existing
+   entries. If the file doesn't exist, create it.
+
+This applies to **trivial, recurring** terms above all (repo, commit, branch,
+worktree, what the product is, basic git). A complex term that is the heart of one
+day's work can still be explained that day, but once it's in the glossary it is not
+re-explained later.
+
 Per-feature template and Day-overview structure (adapt headings to the
 beginner-friendly voice above — these are the *contents* to cover, not rigid
 labels to copy verbatim):
@@ -174,8 +204,10 @@ labels to copy verbatim):
 > **How to read this document.** (1-2 sentences telling a beginner how to use it.)
 
 ## The big picture (read this first)
-Plain-language overview: what each project is, who uses it, what got done today.
-Define "project/repository" and "commit" here in beginner terms.
+Plain-language overview of what got done today. Define "project/repository",
+"commit", and what the product (e.g. Yotel) is here **only if they are not already
+in the glossary** — i.e. on the very first log. On every later day, skip those
+basics and the "what is this product" explainer; just name them and move on.
 
 ---
 
@@ -259,10 +291,10 @@ the file's full path:
 
 ```bash
 # 1) markdown -> styled, phone-friendly PDF (rendered next to the .md)
-bash ~/.claude/skills/daily-log/render_pdf.sh "/full/path/to/<YYYY-MM> - <DD> - <one line>.md"
+bash ~/.claude/skills/wong/render_pdf.sh "/full/path/to/<YYYY-MM> - <DD> - <one line>.md"
 
 # 2) upload to Google Drive (uploads the PDF + the .md)
-bash ~/.claude/skills/daily-log/upload_to_drive.sh "/full/path/to/<YYYY-MM> - <DD> - <one line>.md"
+bash ~/.claude/skills/wong/upload_to_drive.sh "/full/path/to/<YYYY-MM> - <DD> - <one line>.md"
 ```
 
 - `render_pdf.sh` converts the markdown to a clean PDF (via `marked` + headless
@@ -319,7 +351,7 @@ Give the user a short summary in chat (outside the Slack code block):
   succeeded or was skipped (per the helpers' output)
 - number of features documented total, repos, and commits covered
 - if any session's last timestamp was within a few minutes of "now" (looks
-  still-active), note it and suggest re-running `/daily-log` after closing that
+  still-active), note it and suggest re-running `/wong` after closing that
   session to capture the tail.
 
 ## Notes

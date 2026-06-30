@@ -6,7 +6,7 @@ a skill and Claude can do something new.
 
 Two skills live here right now.
 
-## daily-log
+## wong
 
 You let Claude build and fix things all day and you barely know how any of it works.
 This sorts that out.
@@ -17,8 +17,8 @@ turns that into a dark mode PDF and drops it in your Google Drive so you can rea
 on the way home. It also gives you a short standup to paste into Slack and it
 explains the git commands you used.
 
-Run /daily-log. Run /daily-log light if you want to spend fewer tokens. It lives in
-the daily-log folder.
+Run /wong. Run /wong light if you want to spend fewer tokens. It lives in
+the wong folder.
 
 ## dormammu
 
@@ -43,14 +43,14 @@ cd kamar-taj
 bash install.sh
 ```
 
-Restart Claude Code and you have /daily-log and /dormammu. If you only want one just
+Restart Claude Code and you have /wong and /dormammu. If you only want one just
 copy that folder into ~/.claude/skills/.
 
 ## Notes
 
-dormammu needs nothing. daily-log uses Python which you already have. The PDF wants
+dormammu needs nothing. wong uses Python which you already have. The PDF wants
 Node and Chrome and the upload wants rclone. If you do not have them it just skips
-that bit. More detail is in daily-log/SKILL.md.
+that bit. More detail is in wong/SKILL.md.
 
 It is MIT so do whatever you want with it.
 

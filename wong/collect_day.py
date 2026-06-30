@@ -12,7 +12,7 @@ the signal that's useful for an end-of-day learning writeup:
   - per-repo git activity for the day (commit map + uncommitted stats)
 
 It writes a single consolidated markdown digest and prints its path. The
-`/daily-log` skill reads that digest and turns it into a teaching guide.
+`/wong` skill reads that digest and turns it into a teaching guide.
 
 Usage:
     python3 collect_day.py [YYYY-MM-DD]      # default: today (local time)
@@ -302,7 +302,7 @@ def main() -> int:
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Collect a day's Claude work into a digest for the daily-log skill.")
+        description="Collect a day's Claude work into a digest for the wong skill.")
     parser.add_argument("date", nargs="?", help="YYYY-MM-DD (default: today, local time)")
     parser.add_argument("--effort", choices=["light", "medium", "heavy"], default="heavy",
                         help="how much detail to capture (lower = fewer tokens). Default heavy.")
