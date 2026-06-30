@@ -4,48 +4,51 @@
 
 Dormammu I've come to bargain.
 
-You know the scene. Strange flies in and makes a deal he cannot win. He gets killed.
-Then he comes back and does it again. He dies on a loop thousands of times until the
-villain gives up.
+You remember the scene. Strange flies in and picks a fight he cannot win. He gets
+murdered. Then he comes back and tries again. He dies on a loop a thousand times
+until the bad guy just gives up.
 
-That is the whole skill.
+That is the entire skill.
 
-You point it at a problem with /dormammu and Claude stops just agreeing with itself.
-It works out what done actually means. It takes a first shot. Then it turns on its
-own work to find what breaks. Empty inputs. Huge inputs. The race nobody tests. The
-slow query that is pretending to be fine.
+You point it at a problem with /dormammu and Claude stops being a yes man. It
+figures out what done actually means. It takes a first shot. Then it viciously
+attacks its own code to see what breaks. Empty inputs. Massive inputs. That tricky
+race condition nobody ever tests. That incredibly slow database query pretending to
+be fine.
 
-When it finds a flaw it says the line and bins the attempt and tries again. It does
-not get to say it is done until it has run the check and seen it pass. A draft that
-just compiles does not count.
+When it spots a flaw it says the magic line and throws the attempt in the bin. It
+does not get to call itself done until it watches the checks pass. Code that just
+compiles does not count here.
 
-It is honest about the loop too. If it keeps failing the same way it asks whether you
-asked for the right thing. If it is stuck on something only you can fix it tells you
-instead of looping forever. And it will not make up fake problems just to look busy.
+It is brutally honest about the loop too. If it keeps failing the exact same way it
+asks if your request was actually sensible. If it gets completely stuck on something
+only you can fix it tells you instead of spinning forever. It will never invent fake
+bugs just to look busy.
 
-No tools to install. No config. It just will not quit.
+No tools to install. No annoying config. It just refuses to quit.
 
 ## It is wired into /goal
 
-This is the clever part. /goal is a built in command that puts up a wall and stops
-Claude from ending the turn until a goal is actually met. dormammu leans on it. When
-you start, dormammu writes the exact /goal line for you and asks you to paste it.
-Only you can run /goal so dormammu cannot run it itself. If you paste it the loop is
-held up by the wall and not by good intentions, and the goal clears itself the
-second the work is really done. If you do not paste it dormammu still holds itself
-to the same bar. dormammu is the brains of the loop and /goal is the cage.
+This is the clever part. /goal is a built in command that builds a wall. It stops
+Claude from ending the turn until a goal is truly met. dormammu uses this trick.
+When you start the skill dormammu writes the perfect /goal line and asks you to
+paste it. Only a human can run /goal so dormammu cannot do it alone. If you paste
+the command the loop is trapped by the wall and not just by good intentions. The
+goal deletes itself the second the work is truly finished. If you refuse to paste it
+dormammu still holds itself to the exact same standard. dormammu is the brains of
+the loop and /goal is the cage.
 
 ## Install
 
-It comes with the kamar-taj bundle at https://github.com/ShockRock2004/kamar-taj or
-you can grab just this one.
+It comes in the main kamar-taj bundle at https://github.com/ShockRock2004/kamar-taj
+or you can just grab this single folder.
 
 ```bash
 cp -R dormammu ~/.claude/skills/
 ```
 
-Restart Claude Code and run /dormammu. The full protocol is in SKILL.md.
+Restart Claude Code and run /dormammu. Find the complete protocol in SKILL.md.
 
-Image is Dormammu from Doctor Strange 2016 and belongs to Marvel Studios. It is
-linked from the MCU wiki for the look and not stored here. This is a fan made and
-free tool with no link to Marvel.
+The image is Dormammu from Doctor Strange 2016 and belongs totally to Marvel
+Studios. It is linked directly from the MCU wiki and not stored here. This is a fan
+made tool given away for free and it has absolutely no link to Marvel.

@@ -1,37 +1,37 @@
 # Kamar-Taj
 
 This is where I keep my Claude Code skills. In Doctor Strange this is the place you
-go to learn magic. Here you come to give Claude new powers. You clone it you install
-a skill and Claude can do something new.
+go to learn magic. Here you come to give Claude new tricks. You clone the repo and
+install a skill and Claude suddenly gets smarter.
 
 Two skills live here right now.
 
 ## wong
 
-You let Claude build and fix things all day and you barely know how any of it works.
-This sorts that out.
+You let Claude build things all day and you have no idea how any of it works. This
+skill fixes that embarrassing problem.
 
-At the end of the day it reads all your Claude sessions and works out what got
-built. Then it writes you a simple study guide so you can actually learn it. It
-turns that into a dark mode PDF and drops it in your Google Drive so you can read it
-on the way home. It also gives you a short standup to paste into Slack and it
-explains the git commands you used.
+It reads all your Claude sessions at the end of the day. It figures out what
+actually got built. Then it writes a simple study guide so you can actually learn it
+instead of just nodding along. It makes a dark mode PDF and throws it into your
+Google Drive for the commute home. It also writes a short standup update for Slack
+and explains those weird git commands you just pasted blindly.
 
-Run /wong. Run /wong light if you want to spend fewer tokens. It lives in
-the wong folder.
+Run /wong. Run /wong light to save some tokens. It lives in the wong folder.
 
 ## dormammu
 
 Dormammu I've come to bargain.
 
 In the film Strange keeps dying on a loop until the villain gives up. This skill
-does the same thing to your code.
+does the exact same thing to your buggy code.
 
-You point it at a problem and Claude stops just agreeing with itself. It works out
-what done really means. It writes a first try. Then it attacks its own work to find
-what breaks. Empty inputs. Huge inputs. The bug you hoped nobody would notice. When
-it finds a flaw it bins the attempt and tries again. It only stops once it has run
-the check and seen it pass.
+You point it at a problem and Claude finally stops agreeing with itself. It figures
+out what done actually looks like. It writes a first try. Then it aggressively
+attacks its own work to find the cracks. Empty inputs. Massive inputs. That stupid
+bug you prayed nobody would notice. When it finds a flaw it throws the whole thing
+away and tries again. It only stops when it watches the check pass with its own
+eyes.
 
 No setup. No extra tools. It just refuses to quit. It lives in the dormammu folder.
 
@@ -43,16 +43,16 @@ cd kamar-taj
 bash install.sh
 ```
 
-Restart Claude Code and you have /wong and /dormammu. If you only want one just
-copy that folder into ~/.claude/skills/.
+Restart Claude Code and you get /wong and /dormammu. If you only want one of them
+just copy that folder into ~/.claude/skills/.
 
 ## Notes
 
-dormammu needs nothing. wong uses Python which you already have. The PDF wants
-Node and Chrome and the upload wants rclone. If you do not have them it just skips
-that bit. More detail is in wong/SKILL.md.
+dormammu needs absolutely nothing. wong uses Python which you probably already have.
+The PDF stuff needs Node and Chrome and the upload wants rclone. If you lack those
+tools it just skips that part. Find more details in wong/SKILL.md.
 
-It is MIT so do whatever you want with it.
+The code is MIT licensed so do whatever you want with it.
 
 Not linked to Marvel in any way. Dormammu has not come to bargain about the license
 yet.
