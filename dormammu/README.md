@@ -25,6 +25,16 @@ instead of looping forever. And it will not make up fake problems just to look b
 
 No tools to install. No config. It just will not quit.
 
+## It is wired into /goal
+
+This is the clever part. /goal is a built in command that sets a session goal and
+puts up a wall that stops Claude from ending the turn until that goal is actually
+met. dormammu uses it. The moment you start, it writes your end state as a /goal
+condition that can be checked as true or false. After that the loop is not held up
+by good intentions. It is held up by the wall. Claude cannot say it is done until
+the goal is really met, and the goal clears itself the second it is. dormammu is the
+brains of the loop and /goal is the cage.
+
 ## Install
 
 It comes with the kamar-taj bundle at https://github.com/ShockRock2004/kamar-taj or
