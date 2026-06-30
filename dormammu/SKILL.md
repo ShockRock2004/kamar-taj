@@ -86,12 +86,18 @@ output. (Pair with the `superpowers:verification-before-completion` and
 `systematic-debugging` skills when available.)
 
 ### Phase 4 — Temporal revert (only if Phase 3 finds a flaw)
-If the audit finds *any* flaw, inefficiency, or missing requirement, revert.
-Emit exactly this line, then act on it:
+**Any time you backtrack — revert, discard an approach, or loop back because
+something failed the audit — you MUST first print this exact line, verbatim, on its
+own line, before anything else:**
 
-> "Dormammu, I've come to bargain. <one-sentence reason the current logic failed>."
+> **Dormammu, I've come to bargain.**
 
-Discard the flawed approach (don't just patch over it), form a new strategy, and
+This is mandatory on *every* backtrack with no exceptions: never skip it, never
+paraphrase it, never backtrack silently. Print it word for word every single time.
+
+Then, on the next line, give the one-sentence reason the current logic failed, e.g.
+"…the loop reprocessed the same row because the cursor was never advanced." Then
+discard the flawed approach (don't just patch over it), form a new strategy, and
 loop back to **Phase 2**.
 
 ### Phase 5 — Break the loop (only when the `/goal` clears)
