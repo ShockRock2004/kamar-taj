@@ -99,20 +99,38 @@ Prefer **real evidence** over assertion: run the tests, run the code, check the
 output. (Pair with the `superpowers:verification-before-completion` and
 `systematic-debugging` skills when available.)
 
-### Phase 4 — Temporal revert (only if Phase 3 finds a flaw)
-**Any time you backtrack — revert, discard an approach, or loop back because
-something failed the audit — you MUST first print this exact line, verbatim, on its
-own line, before anything else:**
+### Phase 4 — Temporal revert (the bargain line — fires constantly, not rarely)
+**The instant you backtrack in ANY way, the very first thing you output — before any
+other text, code, or tool call — MUST be this exact line, verbatim, on its own
+line:**
 
 > **Dormammu, I've come to bargain.**
 
-This is mandatory on *every* backtrack with no exceptions: never skip it, never
-paraphrase it, never backtrack silently. Print it word for word every single time.
+Then, on the next line, one sentence on why the previous attempt failed. Then change
+approach and loop back to **Phase 2**.
 
-Then, on the next line, give the one-sentence reason the current logic failed, e.g.
-"…the loop reprocessed the same row because the cursor was never advanced." Then
-discard the flawed approach (don't just patch over it), form a new strategy, and
-loop back to **Phase 2**.
+**"Backtrack" is broad. Read this list — if ANY of these happen, it counts, and the
+line fires first:**
+- a test, build, lint, type-check, or any verification **fails** and you are about
+  to try something different;
+- you **undo, rewrite, or replace** an edit you just made;
+- you **change approach / strategy** for something you already attempted;
+- an **assumption turned out wrong** (an API, a type, a path, a value, how
+  something behaves) and you adjust because of it;
+- you hit an **error or unexpected output** and pivot;
+- you catch a **flaw, edge case, or inefficiency** in your own work and redo that
+  part;
+- you abandon a half-built path and start that piece over.
+
+Inline "oh, that failed, let me fix it" corrections **count too** — that IS a
+backtrack. Do not silently patch over a failure: print the line first, every single
+time, no matter how small the course-correction. Fixing without the line is the one
+thing this skill forbids. Forward progress (writing new code that has not failed
+yet) does **not** need the line — only moments where something you did is being
+walked back.
+
+When in doubt about whether something counts, print the line. Over-printing is fine;
+silent backtracking is not.
 
 ### Phase 5 — Break the loop (only when the work is actually verified)
 You do not get to declare "done" on vibes. The exit test is the Phase 1 success
