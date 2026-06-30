@@ -27,13 +27,13 @@ No tools to install. No config. It just will not quit.
 
 ## It is wired into /goal
 
-This is the clever part. /goal is a built in command that sets a session goal and
-puts up a wall that stops Claude from ending the turn until that goal is actually
-met. dormammu uses it. The moment you start, it writes your end state as a /goal
-condition that can be checked as true or false. After that the loop is not held up
-by good intentions. It is held up by the wall. Claude cannot say it is done until
-the goal is really met, and the goal clears itself the second it is. dormammu is the
-brains of the loop and /goal is the cage.
+This is the clever part. /goal is a built in command that puts up a wall and stops
+Claude from ending the turn until a goal is actually met. dormammu leans on it. When
+you start, dormammu writes the exact /goal line for you and asks you to paste it.
+Only you can run /goal so dormammu cannot run it itself. If you paste it the loop is
+held up by the wall and not by good intentions, and the goal clears itself the
+second the work is really done. If you do not paste it dormammu still holds itself
+to the same bar. dormammu is the brains of the loop and /goal is the cage.
 
 ## Install
 

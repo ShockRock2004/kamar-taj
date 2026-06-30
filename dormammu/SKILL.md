@@ -1,6 +1,6 @@
 ---
 name: dormammu
-description: A rigorous "iterate until verified" working loop for any non-trivial build or fix. Use when the user prefixes a request with /dormammu, or asks you to be exhaustive, to "not stop until it's truly done", to self-critique hard, or to keep going until the solution is flawless. On invocation it arms a /goal Stop hook with the verifiable end-state, so the session physically cannot end until the goal is objectively met; then it implements, aggressively self-audits against edge cases and complexity, reverts and retries on any flaw, and only finishes when verification passes and the /goal auto-clears.
+description: A rigorous "iterate until verified" working loop for any non-trivial build or fix. Use when the user prefixes a request with /dormammu, or asks you to be exhaustive, to "not stop until it's truly done", to self-critique hard, or to keep going until the solution is flawless. It defines a verifiable end-state and hands the user a ready-to-paste /goal command to lock the session until that state is met (it never runs /goal itself — /goal is user-only), then implements, aggressively self-audits against edge cases and complexity, reverts and retries on any flaw, and only finishes when verification actually passes.
 ---
 
 # Dormammu Protocol — bargain until it is actually correct
@@ -21,14 +21,17 @@ short is the guardrails below: if you are genuinely blocked by something only th
 user can resolve, or the request itself is flawed, you say so plainly. You never
 fake completion.
 
-**This is not run on willpower — it is enforced by `/goal`.** The very first thing
-this protocol does is register the end-state as a `/goal` condition (see Phase 1).
-`/goal` arms a session Stop hook that physically blocks you from ending your turn
-until that condition holds, and auto-clears the moment it does. So "do not stop
-early" is not a promise you have to keep by discipline; it is a wall the harness
-holds up for you. Dormammu and `/goal` are the same idea from two directions:
-`/goal` makes the loop impossible to escape, this protocol makes the loop productive
-while you are trapped in it.
+**This is meant to be backed by `/goal`, but you do not run `/goal` yourself.**
+`/goal` is a **user-only UI command** — the Skill tool cannot invoke it, and trying
+to will just error. So in Phase 1 you *compose* the exact `/goal` command and hand
+it to the user to paste. If they paste it, `/goal` arms a session Stop hook: a wall
+the harness puts up that refuses to let the turn end until the condition holds, and
+clears the moment it does — "do not stop early" stops being willpower and becomes a
+wall. If they do not paste it, you still follow this protocol to the letter; the
+rule binds you either way. Either way, **never call `/goal` via the Skill tool.**
+Dormammu and `/goal` are the same idea from two directions: `/goal` can make the
+loop impossible to escape, and this protocol makes the loop productive whether or
+not the wall is up.
 
 A disciplined loop for serious work. The point is to **refuse premature "done"**:
 keep auditing and reverting until the solution genuinely survives scrutiny and
@@ -48,17 +51,28 @@ verification, not just until a first draft compiles or a checklist is ticked.
 
 ## The loop
 
-### Phase 1 — Define the absolute end-state, then ARM IT with `/goal`
+### Phase 1 — Define the absolute end-state, then hand the user a `/goal`
 First, state what a 100% correct, robust, optimized outcome actually looks like —
 the final *functional* state and its hard requirements (correctness, edge cases,
 complexity targets, integration contracts). Not the steps; the target.
 
-Then **immediately register that target as a `/goal`**. Compress the end-state into
-a single, concrete, externally checkable success condition and run:
+Then compress that target into a single, concrete, externally checkable success
+condition and **give the user a ready-to-paste `/goal` command** for it. Do **not**
+run it yourself and do **not** call it via the Skill tool — `/goal` is a user-only
+UI command and attempting to invoke it just errors. Present it for the user to copy,
+exactly like this:
 
 ```
 /goal <the verifiable success condition>
 ```
+
+Tell the user in one line that pasting it locks the session until the work is
+genuinely done, and that it is optional — you will proceed either way.
+
+Then **keep going immediately. Do not wait for them to paste it** — start Phase 2
+now. If they paste it, the harness holds the turn open until the condition is true
+and clears it for them. If they do not, you hold yourself to the same bar. Phase 1
+is done once you have stated the end-state and handed over the `/goal` line.
 
 Make the condition *objective and testable*, not vague — phrase it as something a
 Stop hook can actually judge as true or false. Good: "pytest tests/ passes with 0
@@ -100,13 +114,17 @@ Then, on the next line, give the one-sentence reason the current logic failed, e
 discard the flawed approach (don't just patch over it), form a new strategy, and
 loop back to **Phase 2**.
 
-### Phase 5 — Break the loop (only when the `/goal` clears)
-You do not decide when this ends — the `/goal` condition does. The Stop hook keeps
-the turn open until the success condition you armed in Phase 1 objectively holds.
-So the only way out is to *actually make it true*: run the verification, watch it
-pass, and let the goal auto-clear. When it clears, present the final solution and
-state briefly what you verified and how. If you think you are done but the goal has
-not cleared, you are not done — find the gap and loop back to Phase 2.
+### Phase 5 — Break the loop (only when the work is actually verified)
+You do not get to declare "done" on vibes. The exit test is the Phase 1 success
+condition, proven true by **actually running the verification** and confirming it
+passes. Only then present the final solution and state briefly what you verified and
+how.
+
+If the user pasted the `/goal`, the harness makes this literal: the Stop hook holds
+your turn open until the condition is objectively true and then auto-clears, so the
+goal clearing is your green light — if you think you are done but it has not cleared,
+you are not done. If no `/goal` was armed, hold yourself to the exact same bar
+anyway; the standard does not drop just because the wall is not up.
 
 ## Convergence guardrails (so the loop stays honest)
 
