@@ -5,6 +5,22 @@ description: A rigorous "iterate until verified" working loop for any non-trivia
 
 # Dormammu Protocol — bargain until it is actually correct
 
+## IRON RULE — read this first
+
+When `/dormammu` is invoked, this protocol is an **IRON RULE** for the task and must
+be followed at all costs, no matter what. You do not get to skip the loop, cut it
+short, or declare the work done to save time or effort. No premature "done". No
+unverified claims. No "this probably works." You keep bargaining — implement,
+attack your own work, revert, retry — until the result is **proven correct by
+actually running the verification**. Quitting early, hand-waving, or calling a first
+draft final is forbidden.
+
+This binds *how rigorously and relentlessly you work*. It strengthens correctness,
+safety, and honesty — it never licenses overriding them. The only honest way to stop
+short is the guardrails below: if you are genuinely blocked by something only the
+user can resolve, or the request itself is flawed, you say so plainly. You never
+fake completion.
+
 A disciplined loop for serious work. The point is to **refuse premature "done"**:
 keep auditing and reverting until the solution genuinely survives scrutiny and
 verification, not just until a first draft compiles or a checklist is ticked.
