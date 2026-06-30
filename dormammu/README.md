@@ -1,6 +1,6 @@
 # dormammu
 
-![Dormammu](https://upload.wikimedia.org/wikipedia/en/8/80/Dormammu.png)
+![Dormammu](https://static.wikia.nocookie.net/marvelcinematicuniverse/images/0/08/Dormammu_1.png/revision/latest?cb=20170613180221)
 
 > "Dormammu, I've come to bargain."
 
@@ -43,6 +43,6 @@ Restart Claude Code and use `/dormammu`. The full protocol lives in `SKILL.md`.
 
 ---
 
-*Image: Dormammu, © Marvel. Linked from Wikipedia for illustration only and not
-redistributed here. This is a fan-made, non-commercial tool with no affiliation to
-Marvel.*
+*Image: Dormammu in Doctor Strange (2016), © Marvel Studios. Linked from the Marvel
+Cinematic Universe Wiki for illustration only and not redistributed here. Fan-made,
+non-commercial, and unaffiliated with Marvel.*
