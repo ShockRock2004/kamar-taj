@@ -1,34 +1,44 @@
 # Kamar-Taj
 
-A small sanctum of Claude Code skills.
+My stash of Claude Code skills. In Doctor Strange, Kamar-Taj is where you go to
+learn the spells nobody put on the syllabus. Same idea here. Clone it, install a
+skill, and Claude quietly picks up a new trick.
 
-In Doctor Strange, Kamar-Taj is the hidden academy where sorcerers train and learn
-their craft. This repo is the same idea for Claude Code: a place that holds the
-skills (think of them as spells) that make Claude work the way you want. Clone it,
-install the spells you like, and Claude picks up new tricks.
+Two in the library so far.
 
-Two spells live here so far.
+## daily-log
 
-## The spells
+Be honest with yourself. You let Claude debug and build things all day and you only
+half know how any of it works. This fixes that.
 
-### daily-log
-Tired of prompting Claude all day without really understanding what happened under
-the hood? `daily-log` reads all of your Claude sessions at the end of the day and
-writes them up as a friendly study guide you genuinely learn from, then renders it
-as a dark mode PDF and syncs it to your phone via Google Drive. It also prints a
-ready to paste standup and explains the git commands you used. See
-[`daily-log/`](daily-log/SKILL.md).
+At the end of the day it reads every Claude session you ran, works out what
+actually got built, and writes you a plain English study guide. Then it renders
+that into a dark mode PDF and drops it in your Google Drive, so you can read it on
+the train home instead of nodding along to a diff you never really understood. It
+also hands you a Slack standup you can paste without touching, and explains the git
+commands you ran so you stop pasting them on faith.
 
-### dormammu
-"Dormammu, I've come to bargain." A rigorous iterate until verified working loop.
-It refuses to call anything done until it has attacked its own work, handled the
-edge cases, and actually run the verification, reverting and retrying on any flaw.
-See [`dormammu/`](dormammu/README.md).
+Run `/daily-log`. Run `/daily-log light` when you are feeling stingy with tokens.
+Lives in [`daily-log/`](daily-log/SKILL.md).
+
+## dormammu
+
+> "Dormammu, I've come to bargain."
+
+The whole point of that scene is that Strange loses, on purpose, forever, until the
+most powerful thing in the multiverse gives up out of sheer annoyance. This skill
+does that to your code.
+
+Point it at a problem and Claude stops being agreeable. It decides what "actually
+done" means, takes its best shot, then turns on its own work and tries to break it.
+The empty input, the million row list, the race nobody tests. When it finds the
+crack it says the line, bins the attempt, and goes again. It does not get to call
+anything finished until it has run the check and watched it pass.
+
+No setup, no dependencies. Just a refusal to lose. Lives in
+[`dormammu/`](dormammu/README.md).
 
 ## Install
-
-Each skill is its own folder. Clone the repo and run the installer to drop them
-into your Claude skills folder:
 
 ```bash
 git clone https://github.com/ShockRock2004/kamar-taj.git
@@ -36,25 +46,17 @@ cd kamar-taj
 bash install.sh
 ```
 
-Restart Claude Code (or start a new session) and the spells are ready: `/daily-log`
-and `/dormammu`.
+Restart Claude Code and `/daily-log` and `/dormammu` are yours. Want only one? Copy
+that folder into `~/.claude/skills/` and move on with your life.
 
-Want just one? Copy that single folder:
+## Fine print
 
-```bash
-cp -R daily-log ~/.claude/skills/
-```
+`dormammu` needs nothing. `daily-log` runs on the Python you already have. The PDF
+wants Node and Chrome, the upload wants rclone, and both just shrug and skip if you
+do not have them. Specifics live in
+[`daily-log/SKILL.md`](daily-log/SKILL.md).
 
-## What you might need
+MIT. Fork it, gut it, do your worst.
 
-* **dormammu** needs nothing. It is pure protocol.
-* **daily-log** uses Python 3, which you already have. For the PDF it uses Node.js
-  and Google Chrome, and for the Google Drive upload it uses rclone. Those are
-  optional and skip themselves cleanly if a tool is missing. Details in
-  [`daily-log/SKILL.md`](daily-log/SKILL.md).
-
-## License
-
-MIT. Do whatever you like with it. See the LICENSE file.
-
-Built with Claude Code. Fan-made and not affiliated with Marvel.
+Not affiliated with Marvel. Dormammu has not, as far as I know, come to bargain
+about the licensing.

@@ -4,45 +4,44 @@
 
 > "Dormammu, I've come to bargain."
 
-A Claude Code skill that makes Claude work in a rigorous **iterate until verified**
-loop. Named after the bargain that would not end: in Doctor Strange, Dr Strange
-traps Dormammu in a time loop and keeps coming back until he gets the outcome he
-wants. This skill does the same thing to a coding task. It refuses to call anything
-done until it has attacked its own work, handled the edge cases, and actually run
-the verification.
+You know the scene. Strange flies into the Dark Dimension, makes a deal he has zero
+leverage for, and gets killed for it. Then he does it again. And again. Thousands
+of deaths on a loop, until the most powerful being in the multiverse gets so sick
+of him that it just folds.
 
-## What it does
+That is the entire skill.
 
-When you prefix a request with `/dormammu` (or ask Claude to be exhaustive and not
-stop until it is truly done), it runs this loop:
+Hit a problem with `/dormammu` and Claude stops nodding along. It decides what
+"actually done" looks like, takes its best shot, then immediately turns on its own
+work hunting for the thing that breaks it. The empty input. The list with a million
+rows. The race condition you were quietly hoping nobody would notice. The query
+that is secretly O(n^2) and smiling about it.
 
-1. **Define the end-state.** What does a flawless, robust, optimized result look
-   like? The target, not the steps.
-2. **Implement** the best real solution, watching complexity and integration
-   contracts.
-3. **Self-audit hard.** Attack the output: edge cases, load, races, weak contracts,
-   simpler-but-correct forms. Back it with real verification, not assertions.
-4. **Revert on any flaw** with the line *"Dormammu, I've come to bargain. <reason>."*,
-   discard the bad approach, and loop back to step 2.
-5. **Stop only on evidence**, then say what was verified.
+When it finds the crack, it says the line, throws the attempt in the bin, and comes
+back with a different plan. It does not get to call anything finished until it has
+run the check and watched it go green. A first draft that merely compiles does not
+count.
 
-It also has honest guardrails: if it keeps failing the same way it questions the
-requirement, if it is genuinely blocked it tells you instead of spinning, and it
-will not invent flaws just to keep looping.
+It is honest about the loop, too. If it keeps faceplanting the same way, it stops
+blaming the code and starts asking whether you requested the right thing. If it is
+genuinely stuck on something only you can unblock, it tells you instead of spinning
+forever. And it will not invent fake problems just to look busy.
+
+No dependencies, no config. Just a refusal to lose.
 
 ## Install
 
-Part of the [kamar-taj](https://github.com/ShockRock2004/kamar-taj) skills repo, or
-drop this folder into your Claude skills folder on its own:
+Ships with the [kamar-taj](https://github.com/ShockRock2004/kamar-taj) bundle, or
+grab it on its own:
 
 ```bash
 cp -R dormammu ~/.claude/skills/
 ```
 
-Restart Claude Code and use `/dormammu`. The full protocol lives in `SKILL.md`.
+Restart Claude Code, then `/dormammu`. The actual protocol lives in `SKILL.md`.
 
 ---
 
-*Image: Dormammu in Doctor Strange (2016), © Marvel Studios. Linked from the Marvel
-Cinematic Universe Wiki for illustration only and not redistributed here. Fan-made,
-non-commercial, and unaffiliated with Marvel.*
+*Image: Dormammu in Doctor Strange (2016), © Marvel Studios. Hotlinked from the MCU
+Wiki for the vibe, not redistributed. Fan made, noncommercial, and very much not
+endorsed by a cosmic god of the Dark Dimension.*
