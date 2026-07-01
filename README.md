@@ -4,7 +4,7 @@ This is where I keep my Claude Code skills. In Doctor Strange this is the place 
 go to learn magic. Here you come to give Claude new tricks. You clone the repo and
 install a skill and Claude suddenly gets smarter.
 
-Two skills live here right now.
+Three skills live here right now.
 
 ## wong
 
@@ -35,6 +35,20 @@ eyes.
 
 No setup. No extra tools. It just refuses to quit. It lives in the dormammu folder.
 
+## agamotto
+
+You want to merge a plan but you know Claude probably missed something obvious. This
+skill brings in an outside expert to tear it apart.
+
+You run it on your code and it summons the Eye of Agamotto. First it does a quick
+self check to catch the stupid mistakes before you spend money on a real review.
+Then it sends your work to a completely different and utterly ruthless AI. The critic
+tries its best to break your code and sends back a list of flaws. Claude reads the
+feedback. It fixes the real problems and argues aggressively about the fake ones.
+They fight it out for up to five rounds until the critic finally approves.
+
+Run /agamotto. It lives in the agamotto folder.
+
 ## Install
 
 ```bash
@@ -43,7 +57,7 @@ cd kamar-taj
 bash install.sh
 ```
 
-Restart Claude Code and you get /wong and /dormammu. If you only want one of them
+Restart Claude Code and you get /wong and /dormammu and /agamotto. If you only want one of them
 just copy that folder into ~/.claude/skills/.
 
 ## Notes

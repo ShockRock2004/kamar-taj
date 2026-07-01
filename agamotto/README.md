@@ -1,0 +1,68 @@
+# agamotto
+
+```text
+                                ....::::::::::::::77^::::^^^^^^^^::...                              
+                         ..::^~!77!~~^^^~~!!!77777JY7777!!~~~~~!!77777!~~^:.                        
+                    .:^^!!!?JJY?~^^~7?????77???7??7777777777??7!~^~7JYJJ?7J77~^:                    
+                 :~!~~~7YY?J?^~JJ??777?JY5PPGGB55G7JBP5BPP5J?7!!7?YJ!^^!?JY5?!!77!:                 
+               ^7!~~7JY?!:.:?Y?7!7J5PGP55YJJJJ5P7J^57YG5YYY5PGPPY7!7?J7^::~7JYJ7~!7?~.              
+             ^77~7JY?!^..~?J7~7YBPB5YJJJJYYYYY5BJ:?7PBYY5P5YYJY5PPG5?!7JJ!::^~?YYJ!!??~             
+           ^77!?YY7^::.~JY!~JB5GGJPJJY5GGGGPPPGP:.~PG5YJ?J5PGP5JJJY5PGY!!JY!:^^^!?YY7!??^           
+         :7?7J5J~::::^JY!~Y#BP57YYGPGPPP55PPPG#~.!BBPPP55YJJJYPGPY??Y5PG5!~YY~:^^^~?YY?7J7:         
+        ~JYYYJ~:::::!5?^JBGP55J:!?GYY5PGPP5Y5P!??#PJJJJY5PPPP5YYYPGY!755PBY^75?:^^^^~7YY??J~        
+      .7Y557^~77~^:?5!~PBPY7J#G~~7GGGPYJ??JY5^ !G5J?????????J5PP5YYPBJ^?P5GG!~5J^^^~!?!7YYJY7.      
+     ^?YY?^^!^:~?5Y5~!BBP77GB5G#~.?PJJ??JJ5J^:JPJYYJJ?77?JJ????JYPPYYGG~^5PPB7~5YJJ?7!^^^7YYYJ:     
+    ~J??!!J?!:!Y?YP~~#BP!5#PYYP#G^!PYJYJ?J!:^5&&#####BBPY?7JYJ????J5YYPB!:YG5B7~55YJ~!??7!!?J?J^    
+   ^YJ77PPJ~:?5~!G?^BBG~5#5YJY55B#7^YJ7YPJ7JPBGGPPGGGBB##BP?7YYJJJJJYYYPB!:5GPB~7P77P?Y5PPPJ!J?Y^   
+  ^Y?J5P5Y7^?P^:55:Y#B7?&5YJ??JY5G5^^5P?~!YPPYJJJJJJY5PGGB##57GJ?YYJJYYYGP^!BPG5^55^!GY75G5Y5!?YY:  
+ ^Y7~JJ7Y?^~G!:!G?^BBG~#GYJJJY55YJPP7Y~:7Y5Y???77777???Y5PGB#P7#5YY55YYYJ5JJJJG#~?G!^7P~~YP?YY!75J. 
+:Y?~7?77!!!YP~~JG~7#P5Y&P5YY5Y5?!^PP?:^YGPJ??77~::^~77??JYPGB#7PGPGY7~^^:^7JY55#7!G?^~P?^!57~!!~75? 
+YP??YYYYYJJP5??5G~?&PYYJY55PBY5~^?Y~~YP!?5Y?77^     ~77??J5GGP77?7??!!??J?J555P&?!G5JJP5JJJJJJJ?!J57
+7BY7????7!!55^^JG~?&##57J7JY5GPPP?^^Y##B7~?J?7!^...^777?J55J!~~77?JB#BBBB#Y!JBB&77G?~~PJ!??7???775G?
+ JBY?YPYYGYYG!~7B?!#G#Y#&GBY775Y~~5G!JPB#5!!?J?777777?JYY7^~7?GG5P#BP55PPG~^Y&BB~JB7~7G!?B77?7Y?5B5.
+  YB5YPGYB?7YP7!GP^PBBBYBGB##P7^?P#&B7?YP#BY!!JYJ??JJ?!75Y5GJ5&B#BGPPPPGGY^!#BB5^GP~!GJJJGYJJY55BP: 
+  .PBGYJYPG?75P7JB?7#G#BPGGGJ~!G&5?YB#Y7?JPBGJ!!5PY?!~7P#B5JG&BGP5555PGBP~!G#GB!?B7!PYJGP5P5J5PPG^  
+   :GGBP55YJJ?J55BG!J#BB#P?JJY&#B##5?Y##PJ??YGGY77!7YGP5Y5G#BGP55555PGBP!!G&BB?!BPJ5?!JPY5PPPP5G~   
+    ^GGGBPYYYJYY5YGP!YBGP5JJ&&#BGGB##Y7Y###BP?!7?5GY?JYB###GGPPPP5PGBBY!?B#BBJ!GPPY777Y?7YPG55G~    
+     ^GBPB#P5P5YJ??BG7Y#GBB##BBGBBPPG#BJ?BGJ77YG#&&BPJJP7J5PGBGPPBBBP?7P##BB?7BP!7?YYJ??PBP5GP^     
+      .Y#GPB#PYYYYJ?PBJ?B#B&BBGGGB#BBG##5?7JG#&#BBBB###BY?!5JJ5GGGB5?5##BB57YB5!7????5GBPY5B5.      
+        !B#PPB#G5YYYJ5BP?YG##BBGGBBBBG5JJ5B5G#PPPPPPPPPGB#G#Y77?Y5PPPGBBGJ?GGJ7????YGBPYYBB?        
+         :5&BGGB#G5YYJJPB5?JPB#BBBGPJ??P&&&GYP#BBBBBBB######BPGPPPPP##BYJPB5??JJJ5BBPJYGBY:         
+           !G&G55G#BG5YJYGBPJJ5BGGGPGB&&###&YJP###BBBBBBBGGGB#&&BG&BPYYPG5J?JJ5GBB5JYG#P~           
+            .7G#G55PB#BP5Y5BBG555GBB&&&####&B5YP##BGGGBBB######BGPYYPGG5JJY5GBBPYJ5G#P!             
+              .!PBBG55PBB#GP5GBGGGPP5PPGB##&#BBPB######BBBGPP5YY5GGG5YY5PGBBGYYYPBB5!.              
+                 :?PB#BPPPGB#BP555PGGGP5555PPGGGGGP555YY5555PGGG5PP5PGBBGP5GBGBBP?^                 
+                    :~?5GBBGGBBBBGPPPPPGGGGGGGGGPPPPPGGGGPP555Y5PPBBBGPPGGGG5J!:                    
+                        .:!?Y5PGGBBBBBBGGGPPPPPPPPP55555PPPGGGGGGGGPPP5J7!^.                        
+                              .:^~7?JJYY55P5555PPP5555YYYYJYYYJJ?7!^:.                              
+```
+
+You think your plan is perfect. It is not. This skill summons an outside AI to
+review your work and explain exactly why it fails.
+
+You run /agamotto on your code. First it flashes the Eye of Agamotto to look into
+the future. It does a fast self check to fix the obvious mistakes. This stops you
+from paying for a real review just to fix a typo.
+
+Then it hands the work to a ruthless external critic. The critic tries to break your
+logic and sends back a brutal list of flaws. Claude does not just accept the
+feedback. It judges every single point. It fixes the actual bugs and aggressively
+argues against the wrong ones. They battle back and forth for up to five rounds. The
+loop only ends when the critic finally approves the code.
+
+## Credit
+
+This is a fork of dementev-dev/adversarial-review which is an amazing tool. They
+built the real engine. I just added the ascii art and the quick self check to save
+some cash. It uses the MIT license just like they do.
+
+## Install
+
+It comes in the main kamar-taj bundle at https://github.com/ShockRock2004/kamar-taj
+or you can just grab this single folder.
+
+```bash
+cp -R agamotto ~/.claude/skills/
+```
+
+Restart Claude Code and run /agamotto.
