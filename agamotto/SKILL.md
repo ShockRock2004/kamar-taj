@@ -37,22 +37,19 @@ Overrides can be combined: `/agamotto plan xhigh sandbox:read-only`.
 Before Step 1, always do these two things, in order.
 
 **0a. Open the Eye.** The very first thing you output on invocation is the Eye of
-Agamotto banner. Print the colored version when the terminal supports truecolor,
-otherwise the plain one:
+Agamotto banner. **Read** `~/.claude/skills/agamotto/eye.txt` (or `eye.txt` in this
+skill's own directory / plugin-cache path), then **print its exact contents inside a
+fenced ```text code block``` in your reply message.**
 
-```bash
-EYE=~/.claude/skills/agamotto
-if { [ "$COLORTERM" = truecolor ] || [ "$COLORTERM" = 24bit ]; } && [ -f "$EYE/eye.ans" ]; then
-  cat "$EYE/eye.ans"   # green truecolor glow
-elif [ -f "$EYE/eye.txt" ]; then
-  cat "$EYE/eye.txt"   # plain universal fallback
-fi
-```
+Do NOT `cat` it through a shell command — the Claude Code chat collapses shell
+output ("Ran 1 shell command") and does not render it as art, so the banner would
+be invisible. It must be in your own message, in a fenced block, to display.
 
-`eye.ans` is the colored ANSI banner (a green Time-Stone glow); `eye.txt` is the
-plain fallback for terminals without truecolor. If neither is in that path (plugin
-or dev-checkout install), look in this skill's own directory instead. If the art
-genuinely cannot be found, skip silently — never fabricate or approximate it.
+Note on color: the chat renders markdown, not ANSI, so the in-chat banner is
+monochrome — that is expected and fine. (A colored `eye.ans` exists for anyone who
+`cat`s it in a real terminal outside the chat, but do not use it for the in-chat
+banner.) If `eye.txt` genuinely cannot be found, skip silently — never fabricate or
+approximate the art.
 
 **0b. Look ahead before you pay (foresight self-review).** The Eye sees failures
 before they happen. BEFORE dispatching the expensive external reviewer, do ONE
