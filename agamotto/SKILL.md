@@ -51,6 +51,13 @@ monochrome — that is expected and fine. (A colored `eye.ans` exists for anyone
 banner.) If `eye.txt` genuinely cannot be found, skip silently — never fabricate or
 approximate the art.
 
+**Do NOT stall on the banner.** The Eye is ~34 lines and paints slowly as it
+streams, so it must never be a wait before any work starts. In the SAME turn, kick
+off the review immediately: issue the first review tool calls (Step 0c reviewer
+detection and Step 1 mode detection / git diffs) **right away — ideally before the
+banner text** — so the review is already underway while the Eye renders. Banner and
+opening review steps happen together, never banner-then-wait-then-work.
+
 **0b. Look ahead before you pay (foresight self-review).** The Eye sees failures
 before they happen. BEFORE dispatching the expensive external reviewer, do ONE
 fast, timeboxed self-review of the same material you are about to send: skim for the
