@@ -9,7 +9,7 @@ SRC="$(cd "$(dirname "$0")" && pwd)"
 DEST="$HOME/.claude/skills"
 mkdir -p "$DEST"
 
-for skill in wong dormammu; do
+for skill in wong dormammu agamotto; do
   mkdir -p "$DEST/$skill"
   cp -R "$SRC/$skill/." "$DEST/$skill/"
   chmod +x "$DEST/$skill/"*.sh 2>/dev/null || true
@@ -18,6 +18,6 @@ done
 
 echo
 echo "Done. Restart Claude Code (or start a new session), then use:"
-echo "   /wong     and     /dormammu"
+echo "   /wong     /dormammu     /agamotto"
 echo
 echo "Optional for wong: Node.js + Google Chrome (PDF), rclone (Google Drive)."
