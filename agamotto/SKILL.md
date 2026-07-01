@@ -1,6 +1,6 @@
 ---
 name: agamotto
-description: Agamotto — adversarial AI code/plan review with foresight. Opens the Eye of Agamotto banner on summon and does a quick foresight self-review, then sends the work to an external reviewer (Codex) while Claude fixes, looping until approved. Auto-detects plan/code/code-vs-plan mode. Invoke with /agamotto.
+description: Agamotto — adversarial AI code/plan review with foresight. Opens the Eye of Agamotto banner on summon and does a quick foresight self-review, then sends the work to an external reviewer (Codex, or a fresh Claude reviewer subagent if codex is not installed or configured) while Claude fixes, looping until approved. Auto-detects plan/code/code-vs-plan mode. Invoke with /agamotto.
 user_invocable: true
 ---
 
@@ -14,7 +14,7 @@ user_invocable: true
 
 > **Platform:** Claude Code only. This skill orchestrates Claude ↔ Codex interaction, where Claude is the executor and Codex is the external reviewer. Running this skill from Codex CLI itself creates a recursive loop — Codex would try to launch itself. If you are Codex — do NOT invoke this skill; perform the review directly.
 
-Sends current work for adversarial review through an external AI model (OpenAI Codex by default). Auto-detects what to review: **plan** or **code**. Claude fixes issues based on reviewer feedback and resubmits until approved. Maximum 5 rounds.
+Sends current work for adversarial review through an external AI model (OpenAI Codex by default). If codex is not installed or configured, it falls back to a fresh, independent Claude reviewer subagent that plays the same adversarial role. Auto-detects what to review: **plan** or **code**. Claude fixes issues based on reviewer feedback and resubmits until approved. Maximum 5 rounds.
 
 ---
 
@@ -28,6 +28,7 @@ Sends current work for adversarial review through an external AI model (OpenAI C
 - Override model: `/agamotto model:gpt-5.4` (argument with `model:` prefix)
 - Override Codex sandbox: `/agamotto sandbox:read-only` (one of: `read-only`, `workspace-write`, `danger-full-access`, `inherit`)
 - Override Codex approval policy: `/agamotto approvals:user` (one of: `user`, `auto_review`, `never`)
+- Choose reviewer: `/agamotto reviewer:claude` (or `reviewer:codex`) — default auto-detects; uses codex if installed, else falls back to a fresh Claude reviewer subagent.
 
 Overrides can be combined: `/agamotto plan xhigh sandbox:read-only`.
 
@@ -55,6 +56,50 @@ and fix those now. This is a quick pass, NOT a replacement for the external revi
 do not skip the real rounds. The point is to spend paid review rounds on the subtle
 issues, not the ones you could have caught yourself. Note in one line what the
 foresight pass fixed (or "foresight pass: nothing obvious"), then continue to Step 1.
+
+**0c. Pick the reviewer.** Agamotto reviews with an external model. Decide which:
+- If the operator passed `reviewer:claude` or `reviewer:codex`, honor it.
+- Otherwise auto-detect: run `command -v codex`. If it resolves, use **codex** (the
+  default external reviewer — Steps 4/7 as written). If it does NOT resolve, fall
+  back to **claude** (see "Claude reviewer fallback" below).
+- If codex resolves but a dispatch later fails with a launch or config error (for
+  example not authenticated), tell the operator once and re-route THIS round through
+  the Claude reviewer fallback instead of aborting.
+
+Set `REVIEWER = codex | claude` and carry it through every round. State which
+reviewer ran in the Step 5 round header.
+
+## Claude reviewer fallback (when codex is unavailable)
+
+When `REVIEWER = claude`, do NOT dispatch the codex runner subagent (Step 4 / Step
+7) or any codex-specific machinery (session id, sandbox, `references/runner.md`, the
+`/tmp` mutation snapshots). Instead, in place of each codex dispatch, launch a fresh
+**Claude reviewer subagent** that produces the review file the rest of the skill
+already expects:
+
+- **Agent tool:** `subagent_type: "general-purpose"`, a capable model,
+  `description: "Agamotto Claude reviewer, round N"`.
+- **Prompt:** the SAME prompt body you built in Step 4 (the `<role>`,
+  `<operating_stance>`, `<attack_surface>`, `<finding_bar>`, `<output_format>`, and
+  `<reviewer_permissions>` blocks — including the exact `VERDICT: APPROVED|REVISE`
+  output contract). Prepend: "You are a fresh, independent reviewer. You did NOT
+  write this code. Read the diff and the cited files yourself. Do not edit, create,
+  or delete any project file — you are a read-only auditor. Write your review, in the
+  exact output_format, to `/tmp/codex-review-${REVIEW_ID}.md`, then reply with the
+  single line `RUNNER_RESULT_AT: /tmp/codex-review-${REVIEW_ID}.md`."
+- For a **resume** round, also give the subagent the prior review and the lead's
+  structured response (Applied / Re-scoped / Rejected) plus the current diff, and
+  ask it to re-review in the same format and overwrite the same review file.
+
+Then continue at **Step 5** exactly as written: read `/tmp/codex-review-${REVIEW_ID}.md`,
+run the semantic sanity checks, show it verbatim, parse the VERDICT, and loop. The
+5-round cap and the fix / evaluate steps are identical.
+
+> **Honest limitation.** A Claude subagent reviewing Claude's work is not as
+> independent as a different model like codex — it shares some blind spots with the
+> author. A fresh, adversarial, read-only subagent still gives real second-pair-of-
+> eyes value, but prefer codex when available. The Claude fallback is the "better
+> than no review" path.
 
 ## Instructions
 
@@ -204,6 +249,10 @@ If all sources are empty — no changes to review, inform the user.
 **Code-vs-plan review:** prepare the plan path AND collect the list of changed files (as above).
 
 ### Step 4: Build the prompt body, dispatch the runner subagent
+
+> **If `REVIEWER = claude`:** still build the prompt body as below, but do NOT
+> dispatch the codex runner — hand that same body to the Claude reviewer subagent
+> from the "Claude reviewer fallback" section, then resume at Step 5.
 
 Main thread composes the prompt BODY (without the session marker — the subagent adds it). Select the right template from below based on review mode.
 
@@ -792,6 +841,12 @@ abort?
 This is a soft signal, not a hard gate. Default to continuing if the operator does not respond.
 
 ### Step 7: Resubmit to Codex (Rounds 2-5)
+
+> **If `REVIEWER = claude`:** ignore the codex resume machinery in this step. Launch
+> a fresh Claude reviewer subagent (per the "Claude reviewer fallback" section) with
+> the prior review, your structured response, and the current diff, then resume at
+> Step 5. There is no session id or resume for the Claude path — each round is a
+> fresh subagent.
 
 **Resume is the primary path.** Saves tokens and preserves session context. A fresh `codex exec` without resume is an **emergency fallback** when resume itself fails.
 
