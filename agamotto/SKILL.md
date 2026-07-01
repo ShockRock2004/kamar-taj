@@ -37,15 +37,22 @@ Overrides can be combined: `/agamotto plan xhigh sandbox:read-only`.
 Before Step 1, always do these two things, in order.
 
 **0a. Open the Eye.** The very first thing you output on invocation is the Eye of
-Agamotto banner. Display it by printing the bundled art:
+Agamotto banner. Print the colored version when the terminal supports truecolor,
+otherwise the plain one:
 
 ```bash
-cat ~/.claude/skills/agamotto/eye.txt
+EYE=~/.claude/skills/agamotto
+if { [ "$COLORTERM" = truecolor ] || [ "$COLORTERM" = 24bit ]; } && [ -f "$EYE/eye.ans" ]; then
+  cat "$EYE/eye.ans"   # green truecolor glow
+elif [ -f "$EYE/eye.txt" ]; then
+  cat "$EYE/eye.txt"   # plain universal fallback
+fi
 ```
 
-If that path is missing (plugin or dev-checkout install), find `eye.txt` in this
-skill's own directory and print that instead. If it genuinely cannot be found, skip
-silently — never fabricate or approximate the art.
+`eye.ans` is the colored ANSI banner (a green Time-Stone glow); `eye.txt` is the
+plain fallback for terminals without truecolor. If neither is in that path (plugin
+or dev-checkout install), look in this skill's own directory instead. If the art
+genuinely cannot be found, skip silently — never fabricate or approximate it.
 
 **0b. Look ahead before you pay (foresight self-review).** The Eye sees failures
 before they happen. BEFORE dispatching the expensive external reviewer, do ONE
