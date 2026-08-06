@@ -4,7 +4,7 @@ This is where I keep my Claude Code skills. In Doctor Strange this is the place 
 go to learn magic. Here you come to give Claude new tricks. You clone the repo and
 install a skill and Claude suddenly gets smarter.
 
-Three skills live here right now.
+Six skills live here right now.
 
 ## wong
 
@@ -49,6 +49,49 @@ They fight it out for up to five rounds until the critic finally approves.
 
 Run /agamotto. It lives in the agamotto folder.
 
+## whiplash
+
+Not quite my tempo.
+
+You solved the problem and the tests went green and you felt good about yourself.
+That feeling is the problem. Nobody in an interview tells you the answer was fine
+but slow. They just stop replying.
+
+This one reviews your solution the way a hiring panel would. It reads the
+constraints before it judges your speed. It traces your code on a real example
+before it dares call anything a bug. Every complaint arrives with the input that
+breaks you and the exact line that replaces it. It always ends with the best
+possible solution written in your own language and commented properly.
+
+Run /whiplash. It lives in the whiplash folder.
+
+## handoff
+
+Every fresh session you explain the whole project again. The stack and the goal and
+the thing you were halfway through fixing. Every morning. Every time the context
+runs out.
+
+This one keeps a HANDOFF.md at your repo root so a new agent starts warm. The
+objective and the current state and what is in flight and what is blocking you. It
+updates in place and it never overwrites and it prunes whatever stopped being true.
+It hides the file in .git/info/exclude so your working notes never land in a commit
+somebody else has to read.
+
+Run /handoff. It lives in the handoff folder.
+
+## askagy
+
+Claude has been agreeing with itself for an hour and you cannot tell any more
+whether the plan is good or whether it just sounds good.
+
+This one goes and asks somebody else. agy is the Antigravity CLI and it runs as a
+completely separate agent that cannot see your chat or your open files. The skill
+writes it a proper prompt and hands over the context it could not possibly have and
+relays the answer attributed. It flags the places where the two of them disagree. If
+agy is not installed it tells you and stops instead of faking a second opinion.
+
+Run /askagy. It lives in the askagy folder.
+
 ## Install
 
 ```bash
@@ -57,14 +100,17 @@ cd kamar-taj
 bash install.sh
 ```
 
-Restart Claude Code and you get /wong and /dormammu and /agamotto. If you only want one of them
-just copy that folder into ~/.claude/skills/.
+Restart Claude Code and you get /wong and /dormammu and /agamotto and /whiplash and
+/handoff and /askagy. If you only want one of them just copy that folder into
+~/.claude/skills/.
 
 ## Notes
 
-dormammu needs absolutely nothing. wong uses Python which you probably already have.
-The PDF stuff needs Node and Chrome and the upload wants rclone. If you lack those
-tools it just skips that part. Find more details in wong/SKILL.md.
+dormammu and handoff and whiplash need absolutely nothing. wong uses Python which
+you probably already have. The PDF stuff needs Node and Chrome and the upload wants
+rclone. askagy needs the Antigravity CLI on your PATH. If you lack any of those
+tools the skill just skips that part or tells you plainly. Find more details in each
+folder.
 
 The code is MIT licensed so do whatever you want with it.
 
