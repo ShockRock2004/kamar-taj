@@ -1,6 +1,6 @@
 ---
 name: agamotto
-description: Agamotto — adversarial AI code/plan review with foresight. Opens the Eye of Agamotto banner on summon and does a quick foresight self-review, then sends the work to an external reviewer (Codex, or a fresh Claude reviewer subagent if codex is not installed or configured) while Claude fixes, looping until approved. Auto-detects plan/code/code-vs-plan mode. Invoke with /agamotto.
+description: Agamotto — adversarial AI code/plan review with foresight. Opens the Eye of Agamotto banner on summon and does a quick foresight self-review, then sends the work to an external reviewer (Codex, the Antigravity CLI `agy` on request via reviewer:agy, or a fresh Claude reviewer subagent if codex is not installed or configured) while Claude fixes, looping until approved. Auto-detects plan/code/code-vs-plan mode. Invoke with /agamotto.
 user_invocable: true
 ---
 
@@ -14,7 +14,7 @@ user_invocable: true
 
 > **Platform:** Claude Code only. This skill orchestrates Claude ↔ Codex interaction, where Claude is the executor and Codex is the external reviewer. Running this skill from Codex CLI itself creates a recursive loop — Codex would try to launch itself. If you are Codex — do NOT invoke this skill; perform the review directly.
 
-Sends current work for adversarial review through an external AI model (OpenAI Codex by default). If codex is not installed or configured, it falls back to a fresh, independent Claude reviewer subagent that plays the same adversarial role. Auto-detects what to review: **plan** or **code**. Claude fixes issues based on reviewer feedback and resubmits until approved. Maximum 5 rounds.
+Sends current work for adversarial review through an external AI model (OpenAI Codex by default). If codex is not installed or configured, it falls back to a fresh, independent Claude reviewer subagent that plays the same adversarial role. On request (`reviewer:agy`) it uses the Antigravity CLI instead. Auto-detects what to review: **plan** or **code**. Claude fixes issues based on reviewer feedback and resubmits until approved. Maximum 5 rounds.
 
 ---
 
@@ -28,7 +28,8 @@ Sends current work for adversarial review through an external AI model (OpenAI C
 - Override model: `/agamotto model:gpt-5.4` (argument with `model:` prefix)
 - Override Codex sandbox: `/agamotto sandbox:read-only` (one of: `read-only`, `workspace-write`, `danger-full-access`, `inherit`)
 - Override Codex approval policy: `/agamotto approvals:user` (one of: `user`, `auto_review`, `never`)
-- Choose reviewer: `/agamotto reviewer:claude` (or `reviewer:codex`) — default auto-detects; uses codex if installed, else falls back to a fresh Claude reviewer subagent.
+- Choose reviewer: `/agamotto reviewer:claude` (or `reviewer:codex`, or `reviewer:agy`) — default auto-detects; uses codex if installed, else falls back to a fresh Claude reviewer subagent. `agy` is never auto-selected; it runs only when asked for.
+- With `reviewer:agy`, pick the agy model with `model:<name>` (run `agy models` to list them); `low`/`medium`/`high`/`xhigh` map to agy's `--effort`. `sandbox:` and `approvals:` are Codex-only and are ignored with a one-line note.
 
 Overrides can be combined: `/agamotto plan xhigh sandbox:read-only`.
 
@@ -69,7 +70,10 @@ issues, not the ones you could have caught yourself. Note in one line what the
 foresight pass fixed (or "foresight pass: nothing obvious"), then continue to Step 1.
 
 **0c. Pick the reviewer.** Agamotto reviews with an external model. Decide which:
-- If the operator passed `reviewer:claude` or `reviewer:codex`, honor it.
+- If the operator passed `reviewer:claude`, `reviewer:codex`, or `reviewer:agy`, honor it.
+- `reviewer:agy` is explicit-only — auto-detect never picks it. When it is requested,
+  resolve the binary per "agy reviewer" below; if agy is not found, say so plainly
+  and stop. Do NOT silently swap in codex or Claude, and never fabricate an agy review.
 - Otherwise auto-detect: run `command -v codex`. If it resolves, use **codex** (the
   default external reviewer — Steps 4/7 as written). If it does NOT resolve, fall
   back to **claude** (see "Claude reviewer fallback" below).
@@ -77,7 +81,7 @@ foresight pass fixed (or "foresight pass: nothing obvious"), then continue to St
   example not authenticated), tell the operator once and re-route THIS round through
   the Claude reviewer fallback instead of aborting.
 
-Set `REVIEWER = codex | claude` and carry it through every round. State which
+Set `REVIEWER = codex | claude | agy` and carry it through every round. State which
 reviewer ran in the Step 5 round header.
 
 ## Claude reviewer fallback (when codex is unavailable)
@@ -111,6 +115,84 @@ run the semantic sanity checks, show it verbatim, parse the VERDICT, and loop. T
 > author. A fresh, adversarial, read-only subagent still gives real second-pair-of-
 > eyes value, but prefer codex when available. The Claude fallback is the "better
 > than no review" path.
+
+## agy reviewer (Antigravity CLI, `reviewer:agy`)
+
+When `REVIEWER = agy`, the main thread calls agy directly through the Bash tool — no
+runner subagent, and none of the codex machinery (session-id rollouts, sandbox /
+approvals flags, bwrap preflight, `references/runner.md`). It produces the same
+`/tmp/codex-review-${REVIEW_ID}.md` the rest of the skill expects, then continues at
+**Step 5**. The pre/post **workspace mutation snapshot** from Step 4 still runs around
+every agy call — agy is an agent with tools of its own.
+
+**1. Resolve the binary (once per review).** First hit wins:
+
+```bash
+AGY="$(command -v agy 2>/dev/null)"
+[ -z "$AGY" ] && [ -x "$HOME/AppData/Local/agy/bin/agy.exe" ] && AGY="$HOME/AppData/Local/agy/bin/agy.exe"
+[ -z "$AGY" ] && [ -x "$HOME/.local/bin/agy" ]                && AGY="$HOME/.local/bin/agy"
+[ -z "$AGY" ] && [ -x "/usr/local/bin/agy" ]                  && AGY="/usr/local/bin/agy"
+echo "${AGY:-NOT_FOUND}"
+```
+
+`NOT_FOUND` → tell the operator the Antigravity CLI is not installed or not on `PATH`,
+offer `reviewer:codex` / `reviewer:claude` instead, and stop.
+
+**2. agy cannot run shell commands headlessly.** In `--print` mode any shell command
+the model tries is auto-denied unless the user added an allow-rule, but it CAN read
+files. So the lead does the git work itself:
+
+- Code / code-vs-plan: run the exact diff commands chosen in Step 3 and write their
+  combined output to `/tmp/codex-diff-${REVIEW_ID}.patch`.
+- In the prompt body, replace the `<task>` line `Run <git diff commands> to see the
+  full diffs.` with `Read the full diff at <diff-path>. Read any changed or related
+  file in the repo directly for context.`
+- Append to `<reviewer_permissions>`: `Shell commands are unavailable in this session.
+  Base findings on the diff and files you read; say so when a finding would need a
+  test run to confirm.`
+
+**3. Build the prompt file** `/tmp/codex-agy-prompt-${REVIEW_ID}.md`: the same
+read-only preamble as the Claude fallback ("You are a fresh, independent reviewer. You
+did NOT write this code. … read-only auditor."), minus the "write your review to a
+file" sentence — agy returns the review as its response. Then the full Step 4 body
+(role, stance, attack surface, finding bar, output_format with the exact
+`VERDICT: APPROVED|REVISE` contract, optional language block, reviewer_permissions).
+
+**4. Call agy.** On Windows (Git Bash) pass Windows-form paths to `agy.exe` via
+`cygpath -w`; elsewhere use the paths as-is. The prompt goes in as ONE argument read
+from the file — never stdin, never inline:
+
+```bash
+timeout 570 "$AGY" --print-timeout 540s --mode plan --output-format json \
+  --add-dir "<REPO_ROOT>" --add-dir "<directory holding the /tmp review files>" \
+  [--model <AGY_MODEL>] [--effort <AGY_EFFORT>] \
+  --print "$(cat /tmp/codex-agy-prompt-${REVIEW_ID}.md)" \
+  > /tmp/codex-agy-out-${REVIEW_ID}.json
+```
+
+Set the Bash tool `timeout` to 600000. Omit `--model` unless the operator passed
+`model:<name>` (agy then uses the user's configured default); omit `--effort` unless a
+reasoning override was passed. Do NOT pass `--dangerously-skip-permissions`.
+
+**5. Unpack the reply.** Parse the JSON (python or jq). Write `.response` verbatim to
+`/tmp/codex-review-${REVIEW_ID}.md` and keep `.conversation_id` as `AGY_CONVERSATION_ID`.
+Treat any of these as a **launch failure** (handled by Step 5's one-retry rule): non-zero
+exit, exit 124 (timeout), unparseable JSON, `status` other than `SUCCESS`, or an empty
+`response`. agy reports `SUCCESS` with an empty response when a needed tool was denied —
+check `denied_actions` and quote it to the operator.
+
+**6. Rounds 2-5 (Step 7).** Write the structured resume body (Applied / Re-scoped /
+Rejected with reasoning / Specific asks) plus a fresh `/tmp/codex-diff-${REVIEW_ID}.patch`
+of the current diff, put the body in the prompt file, and call agy again with
+`--conversation <AGY_CONVERSATION_ID>` added so it keeps its prior review in context.
+If that call fails, fall back once to a fresh agy call whose prompt carries the prior
+review verbatim plus the resume body; that fresh call consumes a round, like codex
+fresh-exec. A second failure ends the review in the Step 8 NOT VERIFIED state.
+
+> **Independence note.** agy runs whatever model the user configured, which may itself
+> be a Claude model. For a genuinely different set of blind spots, pass a non-Claude
+> model, e.g. `model:<a gemini model from agy models>`. Every call spends the user's
+> Antigravity quota.
 
 ## Instructions
 
@@ -264,6 +346,11 @@ If all sources are empty — no changes to review, inform the user.
 > **If `REVIEWER = claude`:** still build the prompt body as below, but do NOT
 > dispatch the codex runner — hand that same body to the Claude reviewer subagent
 > from the "Claude reviewer fallback" section, then resume at Step 5.
+>
+> **If `REVIEWER = agy`:** build the prompt body as below (with the diff-file changes
+> from the "agy reviewer" section), take the pre-dispatch mutation snapshot, call agy
+> per that section instead of dispatching the runner, take the post-dispatch snapshot,
+> then resume at Step 5.
 
 Main thread composes the prompt BODY (without the session marker — the subagent adds it). Select the right template from below based on review mode.
 
@@ -688,7 +775,7 @@ If any check fails → this is a **launch failure** (model produced no actionabl
 Message format:
 
 ```
-## Adversarial Review — Round N (mode: <plan|code|code-vs-plan>, model: <CODEX_MODEL>)
+## Adversarial Review — Round N (mode: <plan|code|code-vs-plan>, model: <CODEX_MODEL, the agy model or "agy default", or "claude">, reviewer: <REVIEWER>)
 
 <verbatim contents of /tmp/codex-review-${REVIEW_ID}.md>
 ```
@@ -858,6 +945,10 @@ This is a soft signal, not a hard gate. Default to continuing if the operator do
 > the prior review, your structured response, and the current diff, then resume at
 > Step 5. There is no session id or resume for the Claude path — each round is a
 > fresh subagent.
+>
+> **If `REVIEWER = agy`:** ignore the codex resume machinery. Follow step 6 of the
+> "agy reviewer" section (`--conversation` resume, one fresh-call fallback) with the
+> mutation snapshot around each call, then resume at Step 5.
 
 **Resume is the primary path.** Saves tokens and preserves session context. A fresh `codex exec` without resume is an **emergency fallback** when resume itself fails.
 
@@ -965,7 +1056,7 @@ Every terminal state emits TWO messages, in this order:
 
 **Approved:**
 ```
-## Adversarial Review — Summary (mode: <mode>, model: <CODEX_MODEL>)
+## Adversarial Review — Summary (mode: <mode>, model: <CODEX_MODEL, the agy model or "agy default", or "claude">, reviewer: <REVIEWER>)
 
 **Status:** Approved after N round(s)
 
@@ -977,7 +1068,7 @@ Every terminal state emits TWO messages, in this order:
 
 **Maximum rounds reached:**
 ```
-## Adversarial Review — Summary (mode: <mode>, model: <CODEX_MODEL>)
+## Adversarial Review — Summary (mode: <mode>, model: <CODEX_MODEL, the agy model or "agy default", or "claude">, reviewer: <REVIEWER>)
 
 **Status:** Maximum reached (5 rounds) — not fully approved
 
@@ -990,7 +1081,7 @@ Every terminal state emits TWO messages, in this order:
 
 **Not verified** (resume failed and the operator chose to conclude, headless with only medium severity, or a second `degraded_environmental` on fresh-exec):
 ```
-## Adversarial Review — Summary (mode: <mode>, model: <CODEX_MODEL>)
+## Adversarial Review — Summary (mode: <mode>, model: <CODEX_MODEL, the agy model or "agy default", or "claude">, reviewer: <REVIEWER>)
 
 **Status:** NOT VERIFIED — fixes applied, reviewer did not re-verify
 
@@ -1006,7 +1097,7 @@ Every terminal state emits TWO messages, in this order:
 
 **Aborted due to environmental failure** (initial dispatch returned `success + degraded_environmental`, or a workspace-mutation hard stop, or a `bwrap` preflight failure surfaced as `infra_error`):
 ```
-## Adversarial Review — Summary (mode: <mode>, model: <CODEX_MODEL>)
+## Adversarial Review — Summary (mode: <mode>, model: <CODEX_MODEL, the agy model or "agy default", or "claude">, reviewer: <REVIEWER>)
 
 **Status:** ABORTED — environmental failure before any valid review
 

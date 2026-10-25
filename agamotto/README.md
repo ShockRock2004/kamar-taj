@@ -50,6 +50,11 @@ feedback. It judges every single point. It fixes the actual bugs and aggressivel
 argues against the wrong ones. They battle back and forth for up to five rounds. The
 loop only ends when the critic finally approves the code.
 
+The critic is Codex by default. If Codex is not installed it falls back to a fresh
+Claude reviewer. Run /agamotto reviewer:agy to use the Antigravity CLI instead, and
+add model:<name> to pick one of its models. A Gemini model is the best pick because
+it does not share Claude's blind spots. agy only runs when you ask for it.
+
 ## Credit
 
 This is a fork of dementev-dev/adversarial-review which is an amazing tool. They
