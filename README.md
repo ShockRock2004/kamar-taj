@@ -4,7 +4,7 @@ This is where I keep my Claude Code skills. In Doctor Strange this is the place 
 go to learn magic. Here you come to give Claude new tricks. You clone the repo and
 install a skill and Claude suddenly gets smarter.
 
-Six skills live here right now.
+Seven skills live here right now.
 
 ## wong
 
@@ -92,6 +92,27 @@ agy is not installed it tells you and stops instead of faking a second opinion.
 
 Run /askagy. It lives in the askagy folder.
 
+## stevejobsappraoch
+
+![Steve Jobs unveils the first iPhone at Macworld 2007](stevejobsappraoch/assets/jobs-unveils-iphone-2007.jpg)
+
+<sub>Steve Jobs unveils the first iPhone at Macworld San Francisco, 9 January 2007. Photo by [Blake Patterson](https://www.flickr.com/photos/35448539@N00), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Steve_Jobs_presents_iPhone.jpg).</sub>
+
+Innovation is saying no to a thousand things.
+
+Your deck has forty words on every slide and your product has eleven features and no
+headline. This skill runs your work through the way Steve Jobs actually did it. Not
+the turtleneck. The process.
+
+First it makes the thing worth presenting. It works backwards from what the customer
+gets. It cuts your ten ideas down to three the way he did at the Top 100 retreat. It
+draws the 2x2 and kills everything that does not fit. Then it puts it on stage. A one
+line headline. A villain before the hero. Three parts and almost no words on the
+slides. One holy smokes moment scripted to the line and a real rehearsal plan. It ends
+with a blunt review and a scorecard. No fake quotes. Everything is sourced.
+
+Run /stevejobsappraoch. It lives in the stevejobsappraoch folder.
+
 ## Install
 
 ```bash
@@ -101,12 +122,12 @@ bash install.sh
 ```
 
 Restart Claude Code and you get /wong and /dormammu and /agamotto and /whiplash and
-/handoff and /askagy. If you only want one of them just copy that folder into
+/handoff and /askagy and /stevejobsappraoch. If you only want one of them just copy that folder into
 ~/.claude/skills/.
 
 ## Notes
 
-dormammu and handoff and whiplash need absolutely nothing. wong uses Python which
+dormammu and handoff and whiplash and stevejobsappraoch need absolutely nothing. wong uses Python which
 you probably already have. The PDF stuff needs Node and Chrome and the upload wants
 rclone. askagy needs the Antigravity CLI on your PATH. If you lack any of those
 tools the skill just skips that part or tells you plainly. Find more details in each
