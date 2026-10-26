@@ -37,29 +37,28 @@ YP??YYYYYJJP5??5G~?&PYYJY55PBY5~^?Y~~YP!?5Y?77^     ~77??J5GGP77?7??!!??J?J555P&
                               .:^~7?JJYY55P5555PPP5555YYYYJYYYJJ?7!^:.                              
 ```
 
-You think your plan is perfect. It is not. This skill summons an outside AI to
-review your work and explain exactly why it fails.
+You think your plan is perfect. It probably isn't, and this skill summons an outside
+AI to tell you why.
 
-You run /agamotto on your code. First it flashes the Eye of Agamotto to look into
-the future. It does a fast self check to fix the obvious mistakes. This stops you
-from paying for a real review just to fix a typo.
+Run /agamotto on your code and it first flashes the Eye of Agamotto to look into the
+future. Then it does a fast self check and fixes the obvious mistakes, so you don't
+pay for a real review just to catch a typo.
 
-Then it hands the work to a ruthless external critic. The critic tries to break your
-logic and sends back a brutal list of flaws. Claude does not just accept the
-feedback. It judges every single point. It fixes the actual bugs and aggressively
-argues against the wrong ones. They battle back and forth for up to five rounds. The
-loop only ends when the critic finally approves the code.
+Next it hands the work to an external critic that tries to break your logic and
+sends back a list of flaws. Claude judges each point on its own. It fixes the real
+bugs and argues against the wrong ones. They go back and forth for up to five
+rounds, and the loop ends when the critic approves the code.
 
 ## Credit
 
-This is a fork of dementev-dev/adversarial-review which is an amazing tool. They
-built the real engine. I just added the ascii art and the quick self check to save
-some cash. It uses the MIT license just like they do.
+This is a fork of dementev-dev/adversarial-review, which is a great tool. They built
+the engine. I added the ASCII art and the quick self check to save some cash. It uses
+the MIT license, same as theirs.
 
 ## Install
 
-It comes in the main kamar-taj bundle at https://github.com/ShockRock2004/kamar-taj
-or you can just grab this single folder.
+It comes in the main kamar-taj bundle at https://github.com/ShockRock2004/kamar-taj,
+or you can grab just this folder.
 
 ```bash
 cp -R agamotto ~/.claude/skills/
